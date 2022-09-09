@@ -30,4 +30,14 @@ public class SmartParkingBoyTest
         var parkingLot = smartParkingBoy.Parking(vehicle);
         Assert.AreEqual("cheap parking 3",parkingLot.Name);
     }
+    [Test]
+    public void should_park_first_vehicle_to_parkingLot_which_has_largest_space_rate_when_the_largest_space_is_the_same_with_others()
+    {
+        var vehicle1 = new Vehicle(LICENSE_PLATE+1);
+        var vehicle2 = new Vehicle(LICENSE_PLATE+2);
+        var smartParkingBoy = new SmartParkingBoy(_parkingLots);
+        smartParkingBoy.Parking(vehicle1);
+        var parkingLot = smartParkingBoy.Parking(vehicle2);
+        Assert.AreEqual("cheap parking 2",parkingLot.Name);
+    }
 }
