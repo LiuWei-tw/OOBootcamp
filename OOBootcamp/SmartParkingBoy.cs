@@ -12,8 +12,12 @@ public class SmartParkingBoy
     // 停车场 多个，都无空位   一辆车要停   报异常
     public ParkingLot Parking(Vehicle vehicle)
     {
-        var parkingLot = _parkingLots.OrderByDescending(e => e.AvailableCount).ThenByDescending(e => e.AvailableCount/e.MaxCapacity).First();
-        parkingLot.ParkVehicle(vehicle);
-        return parkingLot;
+        var parkingLot = _parkingLots.OrderByDescending(e => e.AvailableCount).ThenByDescending(e => e.AvailableCount/(e.MaxCapacity+1)).First();
+        if (parkingLot.ParkVehicle(vehicle))
+        {
+            return parkingLot;
+        }
+
+        throw new NoParkingSlotAvailableException("没空位");
     }
 }

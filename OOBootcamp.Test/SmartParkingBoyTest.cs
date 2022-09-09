@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace OOBootcamp.Test;
@@ -10,6 +11,7 @@ public class SmartParkingBoyTest
     private ParkingLot _parkingLot2 = null!;
     private ParkingLot _parkingLot3 = null!;
     private List<ParkingLot> _parkingLots = null;
+    private readonly List<ParkingLot> _emptyParkingLots = new List<ParkingLot>(){new ParkingLot(0,5,"empty parking")};
     
     [SetUp]
     public void Setup()
@@ -40,4 +42,12 @@ public class SmartParkingBoyTest
         var parkingLot = smartParkingBoy.Parking(vehicle2);
         Assert.AreEqual("cheap parking 2",parkingLot.Name);
     }
+    [Test]
+    public void should_park_first_vehicle_to_parkingLot_which_All_parking_lot_has_no_space()
+    {
+        var vehicle1 = new Vehicle(LICENSE_PLATE+1);
+        var smartParkingBoy = new SmartParkingBoy(_emptyParkingLots);
+        Assert.Throws<NoParkingSlotAvailableException>(()=>smartParkingBoy.Parking(vehicle1));
+    }
+    
 }
