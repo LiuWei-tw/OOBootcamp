@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 
 namespace OOBootcamp.Test;
@@ -29,7 +28,7 @@ public class SmartParkingBoyTest
     {
         var vehicle = new Vehicle(LICENSE_PLATE);
         var smartParkingBoy = new SmartParkingBoy(_parkingLots);
-        var parkingLot = smartParkingBoy.Parking(vehicle);
+        var parkingLot = smartParkingBoy.ParkVehicle(vehicle);
         Assert.AreEqual("cheap parking 3",parkingLot.Name);
     }
     [Test]
@@ -38,8 +37,8 @@ public class SmartParkingBoyTest
         var vehicle1 = new Vehicle(LICENSE_PLATE+1);
         var vehicle2 = new Vehicle(LICENSE_PLATE+2);
         var smartParkingBoy = new SmartParkingBoy(_parkingLots);
-        smartParkingBoy.Parking(vehicle1);
-        var parkingLot = smartParkingBoy.Parking(vehicle2);
+        smartParkingBoy.ParkVehicle(vehicle1);
+        var parkingLot = smartParkingBoy.ParkVehicle(vehicle2);
         Assert.AreEqual("cheap parking 2",parkingLot.Name);
     }
     [Test]
@@ -47,7 +46,22 @@ public class SmartParkingBoyTest
     {
         var vehicle1 = new Vehicle(LICENSE_PLATE+1);
         var smartParkingBoy = new SmartParkingBoy(_emptyParkingLots);
-        Assert.Throws<NoParkingSlotAvailableException>(()=>smartParkingBoy.Parking(vehicle1));
+        Assert.Throws<NoParkingSlotAvailableException>(()=>smartParkingBoy.ParkVehicle(vehicle1));
     }
     
+    [Test]
+    public void should_pick_up_correctly_when_parkingLot_has_this_vehicle()
+    {
+        var vehicle1 = new Vehicle(LICENSE_PLATE+1);
+        var smartParkingBoy = new SmartParkingBoy(_parkingLots);
+        smartParkingBoy.ParkVehicle(vehicle1);
+        Assert.AreEqual(5.0d,smartParkingBoy.RetrieveVehicle(vehicle1.LicensePlate));
+    }
+    [Test]
+    public void should_pick_up_unsuccessfully_when_parkingLot_not_has_this_vehicle()
+    {
+        var vehicle1 = new Vehicle(LICENSE_PLATE+1);
+        var smartParkingBoy = new SmartParkingBoy(_emptyParkingLots);
+        Assert.Throws<VehicleNotFoundException>(()=>smartParkingBoy.RetrieveVehicle(vehicle1.LicensePlate));
+    }
 }
