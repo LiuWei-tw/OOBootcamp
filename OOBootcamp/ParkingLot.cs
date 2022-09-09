@@ -18,6 +18,10 @@ public class ParkingLot
         _parkedVehicles = new ConcurrentDictionary<Vehicle, DateTime>();
     }
     
+    public  int GetAvailableRate()
+    {
+        return AvailableCount/(MaxCapacity+1);
+    }
     public bool ParkVehicle(Vehicle vehicle)
     {
         return AvailableCount > 0 && _parkedVehicles.TryAdd(vehicle, DateTime.UtcNow);
